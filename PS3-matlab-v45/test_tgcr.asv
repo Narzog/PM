@@ -1,0 +1,58 @@
+function test_tgcr
+
+
+close all
+format compact
+%clc
+num_tests     = 1;
+N             = 3	% size of the matrix
+num_clusters  = 7	   % number of clusters
+
+tolrGCR       = 1e-3; % to test fast solutions in about num_clusters iterations
+% test(num_tests,N,num_clusters,tolrGCR);
+
+A = eye(3); 
+% A(3,3) = 3; 
+b = [2,3,4]; 
+xGCR   = tgcr(A,b',tolrGCR,N);
+
+
+
+% tolrGCR       = 1e-12 % to test very accurate solutions
+% test(num_tests,N,num_clusters,tolrGCR)
+
+
+
+
+%*****************************************************
+function [x] = test(num_tests,N,num_clusters,tolrGCR)
+
+D         = diag(1+mod(1:N,num_clusters));
+epsilon   = 0.05*max(max(D))/N;   %cluster radius bounded by 5% of its center 
+
+for h = 1:num_tests;
+   delta = epsilon * rand(N,N);
+   A     = D + delta;
+   b     = rand(N,1);
+   tic
+   xGCR   = tgcr(A,b,tolrGCR,N);
+   timesGCR(h) = toc;
+   tic
+   xLU   = A\b;
+   timesLU(h)  = toc;
+   errors(h)   = max(xLU-xGCR);
+end
+
+eigD  = eig(D);
+eigA  = eig(A);
+close
+plot(real(eigA),imag(eigA),'.')
+hold on
+plot(real(eigD),imag(eigD),'ro')
+axis equal
+title('eigenvalues')
+   
+ave_time_GCR   = mean(timesGCR)
+ave_time_LU    = mean(timesLU)
+max_x_error      = max(errors)
+

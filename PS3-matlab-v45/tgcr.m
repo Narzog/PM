@@ -1,0 +1,88 @@
+function [x, r_norms, k_list, r_norms_list] = tgcr(A,b,tolrGCR,MaxItersGCR)
+% Generalized conjugate residual method for solving Ax = b
+% INPUTS
+% A          : actual matrix of the linear system to be solved
+% b          : right hand side
+% tolrGCR    : convergence tolerance, terminate on norm(b - Ax) / norm(b) < tolrGCR
+% MaxItersGCR: maximum number of iterations before giving up
+% OUTPUTS
+% x          : computed solution, returns null if no convergence
+% r_norms    : vector containing ||r_k||/||r_0|| for each iteration k
+%
+% EXAMPLE:
+% [x, r_norms] = tgcr(A,b,tol,maxiters)
+
+% Generate the initial guess for x at itearation k=0
+x = zeros(size(b));
+
+% Set the initial residual to b - Ax^0 = b
+r = b;
+r_norms(1) = norm(r,2);
+r_norms_list = []; 
+k_list = [];
+k = 0;
+while (r_norms(k+1)/r_norms(1) > tolrGCR) & (k <= MaxItersGCR)
+   
+   r_norms_list = [r_norms_list , r_norms(k+1)/r_norms(1)];
+   k_list = [k_list, k+1]
+   k=k+1;
+   
+   % Use the residual as the first guess for the ne search direction 
+   % and computer its image
+     p(:,k) = r;
+   Ap(:, k) = A * p(:,k);
+
+  % Make the new Ap vector orthogonal to the previous Ap vectors,
+  % and the p vectors A^TA orthogonal to the previous p vectors.
+  % Notice that if you know A is symmetric
+  % you can save computation by limiting the for loop to just j=k-1
+  % however if you need relative accuracy better than  1e-10
+  % it might be safer to keep full orthogonalization even for symmetric A
+  if k >1
+     for j = 1:k-1
+       beta    = Ap(:,k)' * Ap(:,j);
+       p(:,k)  =  p(:,k) - beta *  p(:,j);
+       Ap(:,k) = Ap(:,k) - beta * Ap(:,j);
+       % disp("WUT");
+     end;
+  end
+     
+  % Make the orthogonal Ap vector of unit length, and scale the
+  % p vector so that A * p  is of unit length
+  norm_Ap = norm(Ap(:,k),2);
+  Ap(:,k) = Ap(:,k)/norm_Ap;
+   p(:,k) =  p(:,k)/norm_Ap;
+   % disp(p(:,k))
+   % disp(Ap(:,k))
+
+  % Determine the optimal amount to change x in the p direction
+  % by projecting r onto Ap
+  alpha = r' * Ap(:,k);
+  % disp(alpha);
+  % Update x and r
+  x = x + alpha *  p(:,k);
+  
+  r = r - alpha * Ap(:,k);
+
+  % Save the norm of r
+  r_norms(k+1) = norm(r,2);
+
+  % Print the norm during the iteration
+  % display(k);
+  % fprintf('||r||=%g i=%d\n', r_norms(k+1), k+1);
+
+end
+% display(r_norms_list)
+% display(k+1)
+
+% Notify user of convergence
+if r_norms(k+1) > (tolrGCR * r_norms(1))
+  fprintf(1, 'GCR did NOT converge! Maximum Number of Iterations reached\n');
+  x = [];
+else
+  fprintf(1, 'GCR converged in %d iterations\n', k);
+end
+
+% Scale the r_norms with respect to the initial residual norm
+r_norms = r_norms / r_norms(1);
+

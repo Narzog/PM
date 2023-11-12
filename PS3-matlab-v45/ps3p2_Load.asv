@@ -1,0 +1,28 @@
+[A,b] = ps3p2_Loads;
+% display(A);
+c = condest(A); 
+display(  2*((sqrt(c) - 1)/(sqrt(c) + 1))**kron  )
+function [A,b] = ps3p2_Loads
+% Loads from input files the descriptions of the 2D grid of resistors
+% modeling heat diffusion on a heat conducting plate
+% with nonuniform leakage
+% and a single source in the center
+% as described in problem 2 of PS3
+%
+% EXAMPLE USE:
+% [A,b] = ps3p2_Load
+
+% Historical development note up until to Fall 2020 
+% we were using .mat proprietary matlab file format containing both Resistors and Isources
+% in that case this function was implemented by the following single line of code
+% load(InputName)
+
+% From Fall 2021 we switched to .txt simple ASCII text format that is more compatible: 
+% across different versions of matlab 
+% across different programming languages
+% and can also be read and edited manually by a human!
+% in this case this funciton can be implemented by the following two lines of code
+
+A = sparse(load('ps3p2_A.txt'));
+b = sparse(load('ps3p2_b.txt'));
+end
