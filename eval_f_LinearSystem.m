@@ -34,3 +34,4 @@ p.A     = -p.A/p.Cstore; % note this will result in a 1/p.dz^2 term in A
                        % also pay attention to the negative sign
 %disp(p.A)
 f = p.A * x + p.B * u;
+end
