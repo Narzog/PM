@@ -41,7 +41,7 @@ p.phonon_mean_free = .2;
 t_stop = .70;
 
 %FAILURE (5) 
-heat_source = 300; 
+heat_source = .5; 
 ambient_temperature = 5.0;
 p.electronic_mean_free = 2; 
 p.phonon_mean_free = .5;

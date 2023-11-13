@@ -21,9 +21,9 @@ if isfield(p,'dxFD')
 else
    
    %dxFD=sqrt(eps);                   %works ok in general if ||x0|| not huge
-   % dxFD=2*sqrt(eps)*(1+norm(x0,inf));    %correction for ||x0|| very large (works best)
+   dxFD=2*sqrt(eps)*(1+norm(x0,inf));    %correction for ||x0|| very large (works best)
    %dxFD=2*sqrt(eps)*max(1,norm(x0,inf)); %similar correctly for large ||x0|| 
-   dxFD=2*sqrt(eps)*sqrt(1+norm(x0,inf));     % used in NITSOL solver
+   % dxFD=2*sqrt(eps)*sqrt(1+norm(x0,inf));     % used in NITSOL solver
    % dxFD=2*sqrt(eps)*sqrt(max(1,norm(x0,inf)));% similar to NITSOL
    % disp(['dxFD not specified: using 2*sqrt(eps)*sqrt(1+||x||) = ' num2str(dxFD)])
 end
@@ -34,5 +34,5 @@ for k = 1:N,                        % for each column of the Jacobian
    f_xk    = feval(eval_f,xk,p,u);
    Jf(:,k) = (f_xk - f_x0)/dxFD;
 end
-
+% disp(Jf);
 
