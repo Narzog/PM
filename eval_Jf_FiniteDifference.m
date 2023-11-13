@@ -34,5 +34,4 @@ for k = 1:N,                        % for each column of the Jacobian
    f_xk    = feval(eval_f,xk,p,u);
    Jf(:,k) = (f_xk - f_x0)/dxFD;
 end
-% disp(Jf);
 

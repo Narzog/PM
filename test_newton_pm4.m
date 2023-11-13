@@ -3,9 +3,9 @@ errf = standard_err_value ;
 errDeltax = standard_err_value ;
 relDeltax = standard_err_value ;
 eval_f = 'eval_f_LinearSystem';
-N = 10;  
+N = 10;  %%play around  with amount of nodes 
 [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N);
-x0 = sparse(zeros(N,1)); 
+x0 = sparse(zeros(N,1)); %%% ALso have to play 
 
 visualize = 1;
 u=1;
@@ -18,5 +18,5 @@ disp(x);
 disp(errf_k);
 disp(errDeltax_k);
 disp(relDeltax_k);
-disp(iterations);
+% disp(iterations);
 

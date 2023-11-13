@@ -37,7 +37,6 @@ fastest_eigenvalue = max(abs(lambda));
 % t_stop = (slowest_eigenvalue*2);    %use this to wait until slowest mode
 
 max_dt_FE = 1/fastest_eigenvalue;
-disp("Hello");
-disp(max_dt_FE);
+
 f = p.A * x + p.B * u;
 end

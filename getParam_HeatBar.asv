@@ -1,98 +1,21 @@
 function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 % Defines the parameters for vector field f(x,p,u) = p.A x+ p.B u
 
+%%% Main Spots where we change parameters
 
-% REGRESSION TESTS 
-%No sources 
-heat_source = 0; 
-ambient_temperature = 0.0;
-p.electronic_mean_free = .2; 
-p.phonon_mean_free = .2;
-t_stop = .25;
+%%% Note that the p.A is now within eval_f_Linear_systems due to the
+%%% nonlinearity conditions enforced. 
+%%%max_dt_FE is the reason why it blows up for forward euler, we need to
+%%%make it such that it doesn't blow up by recomputing the dt_FE every time
+%%%but this is not good so we disregard the linear solver. 
 
-% REGRESSION TESTS (1)
-heat_source = 1; 
-ambient_temperature = 100.0;
-p.electronic_mean_free = .2; 
-p.phonon_mean_free = 0;
-t_stop = .70;
-
-
-% REGRESSION TESTS (2)
-% heat_source = 1; 
-% ambient_temperature = 10.0;
-% p.electronic_mean_free = .2; 
-% p.phonon_mean_free = 1;
-% t_stop = .70
-
-
-%REGRESSION TESTS (3)
-heat_source = 1; 
-ambient_temperature = 10.0;
-p.electronic_mean_free = 1; 
-p.phonon_mean_free = .2;
-t_stop = .70;
-
-%REGRESSION TESTS (4)
-heat_source = 1; 
-ambient_temperature = 20.0;
-p.electronic_mean_free = .2; 
-p.phonon_mean_free = .2;
-t_stop = .70;
-
-%FAILURE (5) 
-heat_source = .5; 
+% REGRESSION TESTS%  
+%Change Parameters here% 
+heat_source = 300; 
 ambient_temperature = 5.0;
 p.electronic_mean_free = 2; 
 p.phonon_mean_free = .5;
 t_stop = .75;
-
-
-
-%RUN JACOBIAN AFTER THIS  (1) Control 
-% heat_source = 1; 
-% ambient_temperature = 10.0;
-% t_stop = 1;
-% p.electronic_mean_free = .2; 
-% p.phonon_mean_free = .2;
-% % %(2) Changed the phonon mean free path right now
-% % %Run Jacobian see difference between phonon mean free
-% % %This makes sense because right now temperature is very low and so there is
-% % %a larger T dependence as the phonon mean free is T^3 dependence 
-% heat_source = 1; 
-% ambient_temperature = 10.0;
-% t_stop = 1;
-% p.electronic_mean_free = .2; 
-% p.phonon_mean_free = 1;
-
-% % (3) Run Jacobian see difference between electronic mean free path
-% %now changing the electronic mean free path means a much greater increase
-% %than the one before. 
-% heat_source = 1; 
-% ambient_temperature = 10.0;
-% t_stop = 1;
-% p.electronic_mean_free = 1; 
-% p.phonon_mean_free = .2;
-% % 
-% %RUN JACOBIAN AFTER THIS  (4)
-% %notice jacobian smaller, change in ambient means change in the starting
-% %position of temperatures 
-% heat_source = 1; 
-% ambient_temperature = 1.0;
-% t_stop = 1;
-% p.electronic_mean_free = .2; 
-% p.phonon_mean_free = .2;
-% 
-% %RUN JACOBIAN AFTER THIS  (5)
-%notice jacobian smaller, change in ambient means change in the starting
-%position of temperatures 
-% heat_source = 1; 
-% ambient_temperature = 20.0;
-% t_stop = 1;
-% p.electronic_mean_free = .2; 
-% p.phonon_mean_free = .2;
-
-
 
 % corresponding to a 1D hear conducting bar problem
 % the full state space model equations are dx/dt = f(x,p,u) where
