@@ -1,4 +1,4 @@
-function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L);
+function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 % Defines the parameters for vector field f(x,p,u) = p.A x+ p.B u
 
 
@@ -141,20 +141,11 @@ Rc     = (1/p.km) * p.dz; %the longer the section the larger the thermal resista
 Rloss  = (1/p.ka) / p.dz; %the longer the section the larger the thermal leakage
                           %hence the smaller the thermal resistance to ambient
 % p.A    = spalloc(N,N,3*N);%allocate space for large sparse dynamic matrix in advance
-% % coupling resistors Rc between i and j=i+1
-% for i = 1:N-1,
-%    j=i+1;
-%    p.A(i,i) = p.A(i,i)+(+1/Rc);
-%    p.A(i,j) = p.A(i,j)+(-1/Rc);
-%    p.A(j,i) = p.A(j,i)+(-1/Rc);
-%    p.A(j,j) = p.A(j,j)+(+1/Rc);
-% end
-% leakage resistor Rloss between i and ground
+
 p.B     = sparse(zeros(N,1));  %makes sure all elements are sparse 
 Ia  = p.ka * p.dz * ambient_temperature ;%ambient air
 for i = 1:N,
    p.B(i,1) = p.B(i,1) + Ia;
-  % p.A(i,i) = p.A(i,i) + 1/Rloss;
 end
 
                                %otherwise matlab will convert them to full when adding
