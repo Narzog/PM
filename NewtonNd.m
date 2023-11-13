@@ -45,6 +45,7 @@ while k<=MaxIter & (errf_k>errf | errDeltax_k>errDeltax | relDeltax_k>relDeltax)
    end
    Deltax      = Jf\(-f); %NOTE this is the only difference from 1D to multiD
    X(:,k+1)    = X(:,k) + Deltax;
+   disp(k)
    k           = k+1;
    f           = feval(eval_f,X(:,k),p,u);
    errf_k      = norm(f,inf);
@@ -70,5 +71,6 @@ if errf_k<=errf & errDeltax_k<=errDeltax & relDeltax_k<=relDeltax
 else
    converged = 0;
    fprintf(1, 'Newton did NOT converge! Maximum Number of Iterations reached\n');
+   fprintf("errf_k", errf_k, "errDeltax_k", errDeltax_k,"relDeltax_k",relDeltax_k); 
 end
 

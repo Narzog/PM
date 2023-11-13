@@ -8,14 +8,14 @@ heat_source = 0;
 ambient_temperature = 0.0;
 p.electronic_mean_free = .2; 
 p.phonon_mean_free = .2;
-t_stop = .25
+t_stop = .25;
 
 % REGRESSION TESTS (1)
 heat_source = 1; 
 ambient_temperature = 10.0;
 p.electronic_mean_free = .2; 
 p.phonon_mean_free = .2;
-t_stop = .70
+t_stop = .70;
 
 
 % REGRESSION TESTS (2)
@@ -31,21 +31,21 @@ heat_source = 1;
 ambient_temperature = 10.0;
 p.electronic_mean_free = 1; 
 p.phonon_mean_free = .2;
-t_stop = .70
+t_stop = .70;
 
 %REGRESSION TESTS (4)
 heat_source = 1; 
 ambient_temperature = 20.0;
 p.electronic_mean_free = .2; 
 p.phonon_mean_free = .2;
-t_stop = .70
+t_stop = .70;
 
 %FAILURE (5) 
 heat_source = 1; 
 ambient_temperature = 20.0;
 p.electronic_mean_free = 2; 
 p.phonon_mean_free = 20;
-t_stop = .70
+t_stop = .70;
 
 
 
@@ -159,7 +159,7 @@ p.B     = p.B/p.Cstore;  % note this is important to make sure results
 % define also some example parameters for a typical transient simulation                       
 x_start = sparse(zeros(N,1)); 
 for i = 1:N, 
-    x_start(i,1) = x_start(i,1) + ambient_temperature/1000; 
+    x_start(i,1) = x_start(i,1) + ambient_temperature/1000; %some weird reason to why amibient/1000 works
 end
 t_start = 0;
 
@@ -172,4 +172,4 @@ t_start = 0;
  
 % usually Forward Euler is unstable for timestep>2/fastest_eigenvalue
 % max_dt_FE = 1/fastest_eigenvalue;
-max_dt_FE = .0005
+max_dt_FE = .0005;
