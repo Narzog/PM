@@ -10,11 +10,20 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 
 
 %Change Parameters here% 
-heat_source = 300; 
-ambient_temperature = 5.0;
+heat_source = 1.1; 
+ambient_temperature = 50.0;
 p.electronic_mean_free = 2;  
-p.phonon_mean_free = .5; %%% HAS T cubed dependence 
+p.phonon_mean_free = 15; %%% HAS T cubed dependence 
 t_stop = .75; %doens't matter 
+
+
+%%Doesn't work. 
+% heat_source = 1.1; 
+% ambient_temperature = 50.0;
+% p.electronic_mean_free = 2;  
+% p.phonon_mean_free = 15; %%% HAS T cubed dependence 
+% t_stop = .75; %doens't matte
+
 
 % corresponding to a 1D hear conducting bar problem
 % the full state space model equations are dx/dt = f(x,p,u) where
@@ -77,12 +86,26 @@ p.B     = p.B/p.Cstore;  % note this is important to make sure results
                        % will not depend on the number of sections N
                        
 
-% define also some example parameters for a typical transient simulation                       
+% define also some example parameters for a typical transient simulation     
+
+
+
+
+
+%%% THIS IS WHERE THE INITIAL GUESS IS%%%%%%%%%%%%%
+
 x_start = sparse(zeros(N,1)); 
-% for i = 1:N, 
-%     x_start(i,1) = x_start(i,1) + ambient_temperature/1000; %some weird reason to why amibient/1000 works
-% end
+for i = 1:N, 
+    x_start(i,1) = x_start(i,1) + ambient_temperature; %some weird reason to why amibient/1000 works
+end
 t_start = 0;
+
+
+
+
+
+
+
 
 
 % 
@@ -95,4 +118,4 @@ t_start = 0;
 % 
 % usually Forward Euler is unstable for timestep>2/fastest_eigenvalue
 % max_dt_FE = 1/fastest_eigenvalue;
-max_dt_FE = .00005;
+max_dt_FE = .0005;
