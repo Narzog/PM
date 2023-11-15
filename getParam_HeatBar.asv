@@ -1,7 +1,6 @@
 function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 % Defines the parameters for vector field f(x,p,u) = p.A x+ p.B u
-
-%%% Main Spots where we change parameters
+%% THis function defines mainly p.B
 
 %%% Note that the p.A is now within eval_f_Linear_systems due to the
 %%% nonlinearity conditions enforced. 
@@ -9,13 +8,25 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 %%%make it such that it doesn't blow up by recomputing the dt_FE every time
 %%%but this is not good so we disregard the linear solver. 
 
-% REGRESSION TESTS%  
+
 %Change Parameters here% 
-heat_source = 300; 
-ambient_temperature = 5.0;
-p.electronic_mean_free = 2; 
-p.phonon_mean_free = .5;
-t_stop = .75;
+heat_source = 20.1; %1.1; 
+ambient_temperature = 3;
+p.electronic_mean_free = 1.5;  
+p.phonon_mean_free = .5; %%% HAS T cubed dependence 
+t_stop = .75; %doens't matter 
+
+p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
+p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
+p.ka    = 0.1; %replace with kapitza 
+
+%%Doesn't work with ambient temp as the initial value. 
+% heat_source = 1.1; 
+% ambient_temperature = 5.0;
+% p.electronic_mean_free = 2;  
+% p.phonon_mean_free = .5; %%% HAS T cubed dependence 
+% t_stop = .75; %doens't matte
+
 
 % corresponding to a 1D hear conducting bar problem
 % the full state space model equations are dx/dt = f(x,p,u) where
@@ -48,9 +59,7 @@ t_stop = .75;
 
 % define material properties parameters
 p.N = N;
-p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
-p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
-p.ka    = 0.1; %replace with kapitza 
+
 if ~exist('L','var')
    L=1;
 end
@@ -63,7 +72,6 @@ p.Cstore = p.gamma  * p.dz; %the longer the section the larger the thermal stora
 Rc     = (1/p.km) * p.dz; %the longer the section the larger the thermal resistance
 Rloss  = (1/p.ka) / p.dz; %the longer the section the larger the thermal leakage
                           %hence the smaller the thermal resistance to ambient
-% p.A    = spalloc(N,N,3*N);%allocate space for large sparse dynamic matrix in advance
 
 p.B     = sparse(zeros(N,1));  %makes sure all elements are sparse 
 Ia  = p.ka * p.dz * ambient_temperature ;%ambient air
@@ -79,12 +87,26 @@ p.B     = p.B/p.Cstore;  % note this is important to make sure results
                        % will not depend on the number of sections N
                        
 
-% define also some example parameters for a typical transient simulation                       
+% define also some example parameters for a typical transient simulation     
+
+
+
+
+
+%%% THIS IS WHERE THE INITIAL GUESS IS%%%%%%%%%%%%%
+
 x_start = sparse(zeros(N,1)); 
-% for i = 1:N, 
-%     x_start(i,1) = x_start(i,1) + ambient_temperature/1000; %some weird reason to why amibient/1000 works
-% end
+for i = 1:N, 
+    x_start(i,1) = x_start(i,1) + ambient_temperature;
+end
 t_start = 0;
+
+
+
+
+
+
+
 
 
 % 
@@ -97,4 +119,4 @@ t_start = 0;
 % 
 % usually Forward Euler is unstable for timestep>2/fastest_eigenvalue
 % max_dt_FE = 1/fastest_eigenvalue;
-max_dt_FE = .00005;
+max_dt_FE = .0005;

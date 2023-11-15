@@ -15,7 +15,7 @@ for i = 1:N-1,
    j=i+1;
    k_nicr = p.electronic_mean_free * x(i, 1) + p.phonon_mean_free * x(i, 1)^3;
    %k_nicr = p.electronic_mean_free * x(i, 1);
- 
+   % disp(k_nicr)
    Rc     = (1/k_nicr) * p.dz; %the longer the section the larger the thermal resistance
    p.A(i,i) = p.A(i,i)+(+1/Rc);
    p.A(i,j) = p.A(i,j)+(-1/Rc);
@@ -38,5 +38,5 @@ fastest_eigenvalue = max(abs(lambda));
 
 max_dt_FE = 1/fastest_eigenvalue;
 
-f = p.A * x + p.B * u;
+f =  p.A * x + p.B * u;
 end

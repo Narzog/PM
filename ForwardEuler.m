@@ -39,7 +39,7 @@ for n = 1 : ceil((t_stop-t_start)/timestep),
    f        = feval(eval_f, X(:,n), p, u);
    
    X(:,n+1) = X(:,n) +  dt * f;
-   % disp(X(:,n+1))
+   % disp(X (:,n+1))
    if visualize
       VisualizeState(t,X,n+1,'.b');
    end

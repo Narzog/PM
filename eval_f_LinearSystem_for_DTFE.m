@@ -1,4 +1,4 @@
-function f = eval_f_linearSystem(x,p,u)
+function f = eval_f_linearSystem_for_DTFE(x,p,u,q)
 % evaluates the vector field f(x,p,u) 
 % at state vector x, and with vector of inputs u.
 % p is a structure containing all model parameters
@@ -15,7 +15,7 @@ for i = 1:N-1,
    j=i+1;
    k_nicr = p.electronic_mean_free * x(i, 1) + p.phonon_mean_free * x(i, 1)^3;
    %k_nicr = p.electronic_mean_free * x(i, 1);
- 
+   disp(q);
    Rc     = (1/k_nicr) * p.dz; %the longer the section the larger the thermal resistance
    p.A(i,i) = p.A(i,i)+(+1/Rc);
    p.A(i,j) = p.A(i,j)+(-1/Rc);
@@ -30,6 +30,7 @@ end
 p.A     = -p.A/p.Cstore; % note this will result in a 1/p.dz^2 term in A
                        % also pay attention to the negative sign
 
-                       
 f = p.A * x + p.B * u;
+f = q*f+(1-q)*x;
+% f = (1-q)*p.A * x + q*p.B*u;
 end

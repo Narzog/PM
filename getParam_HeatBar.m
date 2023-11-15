@@ -10,18 +10,21 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 
 
 %Change Parameters here% 
-heat_source = 1.1; 
-ambient_temperature = 50.0;
-p.electronic_mean_free = 2;  
-p.phonon_mean_free = 15; %%% HAS T cubed dependence 
+heat_source = 20.1; %1.1; 
+ambient_temperature = 3;
+p.electronic_mean_free = 1.5;  
+p.phonon_mean_free = .5; %%% HAS T cubed dependence 
 t_stop = .75; %doens't matter 
 
+p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
+p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
+p.ka    = 0.1; %replace with kapitza 
 
-%%Doesn't work. 
+%%Doesn't work with ambient temp as the initial value. 
 % heat_source = 1.1; 
-% ambient_temperature = 50.0;
+% ambient_temperature = 5.0;
 % p.electronic_mean_free = 2;  
-% p.phonon_mean_free = 15; %%% HAS T cubed dependence 
+% p.phonon_mean_free = .5; %%% HAS T cubed dependence 
 % t_stop = .75; %doens't matte
 
 
@@ -56,9 +59,7 @@ t_stop = .75; %doens't matter
 
 % define material properties parameters
 p.N = N;
-p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
-p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
-p.ka    = 0.1; %replace with kapitza 
+
 if ~exist('L','var')
    L=1;
 end
@@ -96,7 +97,7 @@ p.B     = p.B/p.Cstore;  % note this is important to make sure results
 
 x_start = sparse(zeros(N,1)); 
 for i = 1:N, 
-    x_start(i,1) = x_start(i,1) + ambient_temperature; %some weird reason to why amibient/1000 works
+    x_start(i,1) = x_start(i,1) + ambient_temperature;
 end
 t_start = 0;
 
