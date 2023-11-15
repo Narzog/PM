@@ -10,22 +10,22 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 
 
 %Change Parameters here% 
-heat_source = 20.1; %1.1; 
-ambient_temperature = 3;
-p.electronic_mean_free = 1.5;  
-p.phonon_mean_free = .5; %%% HAS T cubed dependence 
-t_stop = .75; %doens't matter 
+% heat_source = 5.1; %1.1; 
+% ambient_temperature = 2;
+% p.electronic_mean_free = 1.5;  
+% p.phonon_mean_free = 5.50; %%% HAS T cubed dependence 
+% t_stop = .75; %doens't matter 
 
 p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
 p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
 p.ka    = 0.1; %replace with kapitza 
 
-%%Doesn't work with ambient temp as the initial value. 
-% heat_source = 1.1; 
-% ambient_temperature = 5.0;
-% p.electronic_mean_free = 2;  
-% p.phonon_mean_free = .5; %%% HAS T cubed dependence 
-% t_stop = .75; %doens't matte
+%%Bad convergence with or without initial condition close to the %%%
+heat_source = 300.1; 
+ambient_temperature = 500.0;
+p.electronic_mean_free = 2;  
+p.phonon_mean_free = 500; %%% HAS T cubed dependence 
+t_stop = .75; %doens't matte
 
 
 % corresponding to a 1D hear conducting bar problem
