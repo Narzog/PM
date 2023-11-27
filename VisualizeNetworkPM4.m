@@ -31,9 +31,9 @@ x_length = length(x);
 vector = 1:x_length;
 vector = transpose(vector);
 % disp(vector)
-% plot(vector,x);  %Other one 
+plot(vector,x);  %Other one 
 % 
-surf(diag(x)) %Other one
+% surf(diag(x)) %Other one
 
 
 

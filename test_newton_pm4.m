@@ -9,7 +9,7 @@ x0 = sparse(zeros(N,1)); %%% ALso have to play
 % x0 = x_start; 
 VisualizeNetworkPM4(x0, standard_err_value,N)
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
+
 % standard_err_value = 1e-4;
 % errf = standard_err_value ;
 % errDeltax = standard_err_value ;
@@ -57,5 +57,5 @@ VisualizeNetworkPM4(x0, standard_err_value,N)
 % disp(errf_k);
 % disp(errDeltax_k);
 % disp(relDeltax_k);
-% 
+
 % % test_newton_pm4 ---> getParam_heatbar(for p.B and change the ambient temperature  ---> eval_f_LinearSystem(for p.A)

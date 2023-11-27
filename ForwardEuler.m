@@ -36,6 +36,7 @@ for n = 1 : ceil((t_stop-t_start)/timestep),
    t(n+1)   = t(n) + dt;
    u        = feval(eval_u, t(n));
    
+
    f        = feval(eval_f, X(:,n), p, u);
    
    X(:,n+1) = X(:,n) +  dt * f;
