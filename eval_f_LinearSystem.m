@@ -1,4 +1,4 @@
-function f = eval_f_inearSystem(x,p,u)
+function f = eval_f_LinearSystem(x,p,u)
 % evaluates the vector field f(x,p,u) 
 
 % at state vector x, and with vector of inputs u.
