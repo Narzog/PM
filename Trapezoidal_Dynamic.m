@@ -1,4 +1,4 @@
-function [X,t] = Trapezoidal_Dynamic(eval_f,x_start,p,eval_u,t_start,t_stop,timestep,visualize, counter_set)
+function [X,t] = Trapezoidal_Dynamic(eval_f,x_start,p,eval_u,t_start,t_stop,timestep,visualize)
 % uses Forward Euler to simulate states model dx/dt=f(x,p,u)
 % startin from state vector x_start at time t_start
 % until time t_stop, with time intervals timestep
@@ -21,26 +21,40 @@ relDeltax = Inf;
 MaxIter = 50;
 FiniteDifference = 1;
 eval_Jf = 'eval_jf_trapezoid';
-current_time = 0;
+current_time = t(1);
 dt = timestep;
-counter = counter_set;
+u_prev = feval(eval_u, t(1));
+f_prev = feval(eval_f, X(:,end), p, u_prev);
 while current_time < t_stop
-    % dt
-u        = feval(eval_u, t(end));
-if counter == counter_set
-[f,dt]  = feval('eval_f_LinearSystem_trap', X(:,end), p, u);
-dt = dt/20;
-        % lambda = eig(p.A);
- % fastest_eigenvalue = max(abs(lambda)); 
- % % usually Forward Euler is unstable for timestep>2/fastest_eigenvalue
- % dt = 1/fastest_eigenvalue;
- counter = 1;
-else
+    if current_time + dt > t_stop
+        current_time = t_stop;
+    else
+        current_time = current_time + dt;
+    end
+    disp(current_time)
+   u  = feval(eval_u, current_time);
    f  = feval(eval_f, X(:,end), p, u);
+   fe_step = X(:,end) + dt*f_prev;
+   p.gamma = X(:,end) + dt/2*f_prev;
+   [converged_val,converged,~,~,~,iterations,~] = NewtonNd(eval_t,fe_step,p,u,errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf);
+   Jf        = eval_Jf_FiniteDifference(eval_f,converged_val,p,u);
+   max_slope = max(max(Jf));
+   min_slope = min(min(Jf));
+if (converged == 0 || iterations > 4 )|| norm(converged_val - X(:,end), Inf)/dt > max_slope
+current_time = current_time - dt;
+disp('decreased triggered')
+% t(end) = current_time;
+dt = dt/2;
+elseif norm(converged_val - X(:,end), Inf)/dt < min_slope
+current_time = current_time - dt;
+dt = dt * 1.2;
+disp('increased triggered')
+% t(end) = current_time;
+else
+X(:, end + 1) = converged_val;
+t(end+1) = current_time;
+f_prev = f;
+u_prev = u;
 end
-   current_time =  current_time + dt;
-   t(end+1)   = t(end) + dt;
-   p.gamma = X(:,end) + dt/2*f;
-   X(:,end+1) = NewtonNd(eval_t,X(:,end) +  40* dt * f,p,u,errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf);
-    counter = counter + 1;
+end
 end
