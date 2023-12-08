@@ -10,14 +10,22 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 
 
 %Change Parameters here% 
-heat_source = 5.1; %1.1; 
-ambient_temperature = 2;
-p.electronic_mean_free = 1.5;  
-p.phonon_mean_free = 5.50; %%% HAS T cubed dependence 
-t_stop = .75; %doens't matter 
+% heat_source = 5.1; %1.1; 
+% ambient_temperature = 2;
+% p.electronic_mean_free = 1.5;  
+% p.phonon_mean_free = 5.50;%%% HAS T cubed dependence 
+% t_stop = .5; %doens't matter 
+
+
+%Change Parameters here% 
+heat_source = 5000.1; %1.1; 
+ambient_temperature = .5;
+p.electronic_mean_free = 500;  
+p.phonon_mean_free = 500; %%% HAS T cubed dependence 
+t_stop = 0.1; %doens't matter 
 
 p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
-p.km    = 0.1; %related to thermal conductance through metal per unit length of the bar
+p.km    = 10; %related to thermal conductance through metal per unit length of the bar
 p.ka    = 0.1; %replace with kapitza 
 
 %%Bad convergence with or without initial condition close to the ambient%%%
@@ -68,7 +76,7 @@ p.dz   = L/(N-1); % length of each segment. N includes the two terminal nodes
                   % not the length of each discretization section.
                   % results should not depend on the number of sections
                   % for a large enough number of sections
-p.Cstore = p.gamma  * p.dz; %the longer the section the larger the thermal storage
+p.Cstore = p.gamma  * p.dz/ (10); %the longer the section the larger the thermal storage
 Rc     = (1/p.km) * p.dz; %the longer the section the larger the thermal resistance
 Rloss  = (1/p.ka) / p.dz; %the longer the section the larger the thermal leakage
                           %hence the smaller the thermal resistance to ambient

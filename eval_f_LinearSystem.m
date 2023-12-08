@@ -30,14 +30,13 @@ end
 
 p.A     = -p.A/p.Cstore; % note this will result in a 1/p.dz^2 term in A
                        % also pay attention to the negative sign
-
-lambda = eig(p.A);
+% disp(p.A)
+% lambda = eig(p.A);
 % slowest_eigenvalue = min(abs(lambda));
-fastest_eigenvalue = max(abs(lambda));
+% fastest_eigenvalue = max(abs(lambda));
 
 % t_stop = (slowest_eigenvalue*2);    %use this to wait until slowest mode
-
-max_dt_FE = 1/fastest_eigenvalue;
+% max_dt_FE = 1/fastest_eigenvalue;
 
 f =  p.A * x + p.B * u;
 end
