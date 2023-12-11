@@ -1,0 +1,25 @@
+% err_fe = norm(X_fe(:, end) - X_ref(:, end), Inf)
+% err_trp = norm(X_tr(:, end) - X_ref(:, end), Inf)
+% Dynamic delta_t
+clear all
+close all
+% load reference.mat;
+% parameters
+N = 5;
+L = 100;
+Nx = N;
+Ny = N;
+Lx = L; 
+Ly = L; 
+standard_err_value = 1e-4;
+[p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar_2D(Nx, Ny, Lx, Ly);
+eval_f = 'eval_f_LinearSystem_2D';
+eval_u = 'eval_u_step';
+visualize = 1;  
+timestep = 10^(-4);
+t_stop = 0.05; % Remove this Afterwards 
+tic;
+visualize = 1;
+[X_fe,t_fe] = ForwardEuler_2D(eval_f,x_start,p,eval_u,t_start,t_stop,timestep,visualize);
+toc
+disp(X_fe(:, end))

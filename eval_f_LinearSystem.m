@@ -8,15 +8,13 @@ function f = eval_f_LinearSystem(x,p,u)
 %
 % f = eval_f_linearSystem(x,p,u)
 N = p.N;
-p.A    = spalloc(N,N,3*N);%allocate space for large sparse dynamic matrix in advance
+p.A    = spalloc(N,N,5*N);%allocate space for large sparse dynamic matrix in advance
 % coupling resistors Rc between i and j=i+1
 
 
 for i = 1:N-1,
    j=i+1;
    k_nicr = p.electronic_mean_free * x(i, 1) + p.phonon_mean_free * x(i, 1)^3;
-   %k_nicr = p.electronic_mean_free * x(i, 1);
-   % disp(k_nicr)
    Rc     = (1/k_nicr) * p.dz; %the longer the section the larger the thermal resistance
    p.A(i,i) = p.A(i,i)+(+1/Rc);
    p.A(i,j) = p.A(i,j)+(-1/Rc);

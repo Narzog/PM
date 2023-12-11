@@ -15,8 +15,8 @@ t(1)   = t_start;
 p.eval_f = eval_f;
 p.delta_t = timestep;
 eval_t = 'eval_f_trapezoid';
-errf = 1e-4;
-errDeltax = 1e-4;
+errf = 1e-10;
+errDeltax = 1e-8;
 relDeltax = Inf;
 MaxIter = 50;
 FiniteDifference = 1;
@@ -31,7 +31,7 @@ while current_time < t_stop
     else
         current_time = current_time + dt;
     end
-    disp(current_time)
+    % disp(current_time)
    u  = feval(eval_u, current_time);
    f  = feval(eval_f, X(:,end), p, u);
    fe_step = X(:,end) + dt*f_prev;
@@ -42,13 +42,13 @@ while current_time < t_stop
    min_slope = min(min(Jf));
 if (converged == 0 || iterations > 4 )|| norm(converged_val - X(:,end), Inf)/dt > max_slope
 current_time = current_time - dt;
-disp('decreased triggered')
+% disp('decreased triggered')
 % t(end) = current_time;
 dt = dt/2;
 elseif norm(converged_val - X(:,end), Inf)/dt < min_slope
 current_time = current_time - dt;
 dt = dt * 1.2;
-disp('increased triggered')
+% disp('increased triggered')
 % t(end) = current_time;
 else
 X(:, end + 1) = converged_val;

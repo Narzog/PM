@@ -18,15 +18,14 @@ function [p,x_start,t_start,t_stop,max_dt_FE] = getParam_HeatBar(N,L)
 
 
 %Change Parameters here% 
-heat_source = 5000.1; %1.1; 
+heat_source = 2.1; %1.1; 
 ambient_temperature = .5;
-p.electronic_mean_free = 500;  
-p.phonon_mean_free = 500; %%% HAS T cubed dependence 
-t_stop = 0.1; %doens't matter 
-
+p.electronic_mean_free = 1;  
+p.phonon_mean_free = 1; %%% HAS T cubed dependence 
+t_stop = 0.75; %doens't matter 
 p.gamma = 0.1; %related to thermal capacitance per unit length of the bar
-p.km    = 10; %related to thermal conductance through metal per unit length of the bar
-p.ka    = 0.1; %replace with kapitza 
+p.km    = 700; %related to thermal conductance through metal per unit length of the bar
+p.ka    = 0.0001; %replace with kapitza 
 
 %%Bad convergence with or without initial condition close to the ambient%%%
 % heat_source = 300.1; 
@@ -86,6 +85,7 @@ Ia  = p.ka * p.dz * ambient_temperature ;%ambient air
 for i = 1:N,
    p.B(i,1) = p.B(i,1) + Ia;
 end
+
 
                                %otherwise matlab will convert them to full when adding
 p.B(1,1)=  heat_source;		     % heat source at the leftmost side of the bar
